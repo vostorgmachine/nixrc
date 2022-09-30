@@ -11,9 +11,9 @@
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -46,9 +46,9 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the Pantheon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.pantheon.enable = true;
+  # Enable the desktop Environment.
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.windowManager.qtile.enable = true;
 
   # Configure keymap in X11
@@ -85,6 +85,38 @@
     isNormalUser = true;
     description = "vostorg";
     extraGroups = [ "networkmanager" "wheel" ];
+
+  # soft section
+    packages = with pkgs; [
+      figlet
+      catdoc
+      lolcat
+      yt-dlp
+      bpytop
+      gdu
+      python3
+      zotero
+      firefox
+      thunderbird
+      qtile
+      nitrogen
+      feh
+      calibre
+      exa
+      bat
+      ranger
+      vim
+      neovim
+      cmus
+      librewolf
+      alacritty
+      st
+      guake
+      picom
+      git
+      cmatrix
+      udiskie
+    ];
   };
 
   # Allow unfree packages
@@ -93,29 +125,8 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    telegram-cli
-    ncdu
-    htop
-    alacritty
-    picom
-    st
-    termite
-    feh
-    librewolf
-    powerline
-    vim 
-    wget
-    firefox
-    git
-    ranger
-    python
-    python3
-    lolcat
-    figlet
-    neofetch
-    qtile
-    emacs
-    tmux
+  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #  wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -139,10 +150,16 @@
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leavecatenate(variables, "bootdev", bootdev)
+  # on your system were taken. It‘s perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
 
+  # virtualbox settings
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "vostorg" ];
+  
+  # bluetoothg enabling
+  hardware.bluetooth.enable = true;
 }
